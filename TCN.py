@@ -15,15 +15,17 @@ from torch.nn.utils import weight_norm
 class BasicBlock(nn.Module):
     def __init__(self,in_channels,out_channels,kernel_size,padding,stride,dilation,dropout=0.2):
         super().__init__()
-        self.conv1 = weight_norm(nn.Conv1d(in_channels,out_channels,kernel_size=kernel_size,                                         stride=stride,padding=(padding,0),dilation=dilation))
+        self.conv1 = weight_norm(nn.Conv1d(in_channels,out_channels,kernel_size=kernel_size,\
+                                           stride=stride,padding=(padding,0),dilation=dilation))
         self.relu1 = nn.ReLU()
         self.dropout1 = nn.Dropout(dropout)
         
-        self.conv2 = weight_norm(nn.Conv1d(in_channels,out_channels,kernel_size=kernel_size,                                         stride=stride,padding=(padding,0),dilation=dilation))
+        self.conv2 = weight_norm(nn.Conv1d(in_channels,out_channels,kernel_size=kernel_size,\
+                                           stride=stride,padding=(padding,0),dilation=dilation))
         self.relu2 = nn.ReLU()
         self.dropout2 = nn.Dropout(dropout)
         
-        self.residual = nn.Sequential(self.conv1,self.relu1,self.dropout1,                                      self.conv2,self.relu2,self.dropout2)
+        self.residual = nn.Sequential(self.conv1,self.relu1,self.dropout1,self.conv2,self.relu2,self.dropout2)
         self.shortcut = nn.Sequential()
         if in_channels!=out_channels:
             self.shortcut = nn.Conv1d(in_channels,out_channels,kernel_size)
@@ -47,7 +49,8 @@ class TemporalConvNet(nn.Module):
         
         for i in range(num_levels):
             dilation = 2**i
-            layers.append(BasicBlock(in_channels[i],in_channels[i+1],kernel_size,stride=1,dilation=dilation,                                   padding=(kernel_size-1)*dilation,dropout=dropout))
+            layers.append(BasicBlock(in_channels[i],in_channels[i+1],kernel_size,stride=1,dilation=dilation,\
+                                     padding=(kernel_size-1)*dilation,dropout=dropout))
         self.network = nn.Sequential(*layers)
     
     def forward(self,x):
