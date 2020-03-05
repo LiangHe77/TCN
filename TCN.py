@@ -27,6 +27,13 @@ class BasicBlock(nn.Module):
         self.shortcut = nn.Sequential()
         if in_channels!=out_channels:
             self.shortcut = nn.Conv1d(in_channels,out_channels,kernel_size)
+
+        self.init_weight()
+
+    def init_weight(self):
+        nn.init.normal_(self.conv1.weight.data, 0, 0.01)
+        nn.init.normal_(self.conv2.weight.data, 0, 0.01)
+        nn.init.normal_(self.shortcut.weight.data, 0, 0.01)
             
     def forward(self,x):
         residual = self.residual(x)
