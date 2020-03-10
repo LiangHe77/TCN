@@ -64,8 +64,3 @@ class TemporalConvNet(nn.Module):
         return self.network(x)
 
 
-# In[17]:
-
-
-TemporalConvNet(8,[4,2,1])
-
